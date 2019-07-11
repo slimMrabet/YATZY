@@ -90,11 +90,9 @@ public class Yatzy {
     	Stream.of(d1, d2, d3, d4, d5).forEach(x -> {
     		int value = counts.getOrDefault(x-1, 0) +1;
     		counts.put(x -1, value);
-    	});
-    	List<Integer> valueList = counts.values().stream().collect(Collectors.toList()); 
-    	
+    	});    	
     	OptionalInt res  = IntStream
-        	    .range(0, valueList.size())
+        	    .range(0, counts.size())
         	    .filter(i -> counts.getOrDefault(6 - i -1, 0 ) >= 2)
       			.map(i-> (6 - i) * 2 )
       			.findFirst();
@@ -104,23 +102,18 @@ public class Yatzy {
 
     public static int two_pair(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int n = 0;
-        int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6-i-1] >= 2) {
-                n++;
-                score += (6-i);
-            }        
-        if (n == 2)
-            return score * 2;
-        else
-            return 0;
+    	Map<Integer, Integer> counts = new HashMap<>(6);
+    	Stream.of(d1, d2, d3, d4, d5).forEach(x -> {
+    		int value = counts.getOrDefault(x-1, 0) +1;
+    		counts.put(x -1, value);
+    	});
+    	int[] n = {0};
+    	int[] score = {0};
+    	IntStream
+        	    .range(0, 6)
+        	    .filter(i -> counts.getOrDefault(6 - i -1, 0 ) >= 2)
+        	    .forEach(i -> { n[0]++;score[0] += (6-i);});
+    	return n[0] == 2 ? score[0] * 2 : 0;
     }
 
     public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5)
