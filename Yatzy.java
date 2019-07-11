@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,7 +35,6 @@ public class Yatzy {
     
     public static int chance(int d1, int d2, int d3, int d4, int d5)
     {
-
         int total = Stream.of(d1, d2, d3, d4, d5)
         		  .mapToInt(Integer::intValue)
         		  .sum();
@@ -42,36 +42,27 @@ public class Yatzy {
     }
 
     public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 1) sum++;
-        if (d2 == 1) sum++;
-        if (d3 == 1) sum++;
-        if (d4 == 1) sum++;
-        if (d5 == 1) 
-            sum++;
+        return getSum(Stream.of(d1, d2, d3, d4, d5).collect(Collectors.toList()), 1);
 
-        return sum;
     }
 
     public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 2) sum += 2;
-        if (d2 == 2) sum += 2;
-        if (d3 == 2) sum += 2;
-        if (d4 == 2) sum += 2;
-        if (d5 == 2) sum += 2;
-        return sum;
+        return getSum(Stream.of(d1, d2, d3, d4, d5).collect(Collectors.toList()), 2);
     }
 
     public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        int s;    
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
+        return getSum(Stream.of(d1, d2, d3, d4, d5).collect(Collectors.toList()), 3);
+    }
+    
+    private static Predicate<Integer> isEqualToPadding(int padding) {
+        return p -> p == padding;
+    }
+        
+    private static int getSum (List<Integer> list, int padding) {
+    	int total = list.stream().filter(isEqualToPadding(padding))
+		  .mapToInt(Integer::intValue)
+		  .sum();
+    	return total;
     }
 
 //    public int fours()
