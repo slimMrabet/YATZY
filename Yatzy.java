@@ -2,8 +2,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Yatzy {
@@ -74,7 +77,6 @@ public class Yatzy {
     public int fives()
     {
         return getSum(dice, 5);
-
     }
 
     public int sixes()
@@ -84,17 +86,20 @@ public class Yatzy {
 
     public static int score_pair(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int at;
-        for (at = 0; at != 6; at++)
-            if (counts[6-at-1] >= 2)
-                return (6-at)*2;
-        return 0;
+    	Map<Integer, Integer> counts = new HashMap<>(6);
+    	Stream.of(d1, d2, d3, d4, d5).forEach(x -> {
+    		int value = counts.getOrDefault(x-1, 0) +1;
+    		counts.put(x -1, value);
+    	});
+    	List<Integer> valueList = counts.values().stream().collect(Collectors.toList()); 
+    	
+    	OptionalInt res  = IntStream
+        	    .range(0, valueList.size())
+        	    .filter(i -> counts.getOrDefault(6 - i -1, 0 ) >= 2)
+      			.map(i-> (6 - i) * 2 )
+      			.findFirst();
+    
+        return res.isPresent() ? res.getAsInt() : 0;
     }
 
     public static int two_pair(int d1, int d2, int d3, int d4, int d5)
