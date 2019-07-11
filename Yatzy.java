@@ -1,16 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class Yatzy {
-
-    public static int chance(int d1, int d2, int d3, int d4, int d5)
+	
+    protected List<Integer> dice;
+    
+    public Yatzy(int d1, int d2, int d3, int d4, int d5)
     {
-        int total = 0;
-        total += d1;
-        total += d2;
-        total += d3;
-        total += d4;
-        total += d5;
-        return total;
+        List<Integer> paramsList =  Stream.of(d1, d2, d3, d4, d5).collect(Collectors.toList());
+        this.dice =  new ArrayList<Integer>(paramsList);
     }
-
+    
     public static int yatzy(int... dice)
     {
         int[] counts = new int[6];
@@ -20,6 +22,17 @@ public class Yatzy {
             if (counts[i] == 5)
                 return 50;
         return 0;
+    }
+    
+    public static int chance(int d1, int d2, int d3, int d4, int d5)
+    {
+        int total = 0;
+        total += d1;
+        total += d2;
+        total += d3;
+        total += d4;
+        total += d5;
+        return total;
     }
 
     public static int ones(int d1, int d2, int d3, int d4, int d5) {
@@ -55,47 +68,36 @@ public class Yatzy {
         return s;
     }
 
-    protected int[] dice;
-    public Yatzy(int d1, int d2, int d3, int d4, int _5)
-    {
-        dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = _5;
-    }
-
-    public int fours()
-    {
-        int sum;    
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
-    }
-
-    public int fives()
-    {
-        int s = 0;
-        int i;
-        for (i = 0; i < dice.length; i++) 
-            if (dice[i] == 5)
-                s = s + 5;
-        return s;
-    }
-
-    public int sixes()
-    {
-        int sum = 0;
-        for (int at = 0; at < dice.length; at++) 
-            if (dice[at] == 6)
-                sum = sum + 6;
-        return sum;
-    }
+//    public int fours()
+//    {
+//        int sum;    
+//        sum = 0;
+//        for (int at = 0; at != 5; at++) {
+//            if (dice[at] == 4) {
+//                sum += 4;
+//            }
+//        }
+//        return sum;
+//    }
+//
+//    public int fives()
+//    {
+//        int s = 0;
+//        int i;
+//        for (i = 0; i < dice.length; i++) 
+//            if (dice[i] == 5)
+//                s = s + 5;
+//        return s;
+//    }
+//
+//    public int sixes()
+//    {
+//        int sum = 0;
+//        for (int at = 0; at < dice.length; at++) 
+//            if (dice[at] == 6)
+//                sum = sum + 6;
+//        return sum;
+//    }
 
     public static int score_pair(int d1, int d2, int d3, int d4, int d5)
     {
@@ -207,10 +209,6 @@ public class Yatzy {
         int _2_at = 0;
         boolean _3 = false;
         int _3_at = 0;
-
-
-
-
         tallies = new int[6];
         tallies[d1-1] += 1;
         tallies[d2-1] += 1;
